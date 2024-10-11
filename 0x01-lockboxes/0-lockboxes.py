@@ -19,7 +19,7 @@ def canUnlockAll(boxes):
         curr = queue.popleft()
 
         for v in curr:
-            if not visited[v]:
+            if 0 < v < len(boxes) and not visited[v]:
                 queue.append(boxes[v])
                 visited[v] = True
 
