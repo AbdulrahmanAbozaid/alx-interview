@@ -17,6 +17,7 @@ status_counts = {
 total_file_size = 0
 line_count = 0
 
+
 def print_stats():
     """Prints the current statistics."""
     print("File size: {}".format(total_file_size))
@@ -24,17 +25,18 @@ def print_stats():
         if status_counts[code] > 0:
             print("{}: {}".format(code, status_counts[code]))
 
+
 try:
     # Read stdin line by line
     for line in sys.stdin:
         line = line.strip()
         line_count += 1
-        
+
         # Split line into components
         parts = line.split()
         if len(parts) < 7:
             continue
-        
+
         # Extract status code and file size
         status_code = parts[-2]
         try:
@@ -42,11 +44,11 @@ try:
             total_file_size += file_size
         except ValueError:
             continue
-        
+
         # Update status code count if it is a valid code
         if status_code in status_counts:
             status_counts[status_code] += 1
-        
+
         # Print statistics every 10 lines
         if line_count % 10 == 0:
             print_stats()
