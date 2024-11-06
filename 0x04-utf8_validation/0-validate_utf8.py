@@ -1,47 +1,41 @@
 #!/usr/bin/python3
-"""UTF-8 Validation
-
-understanding of the UTF-8 encoding scheme,
-and Python programming skills to validate whether a given
-dataset represents a valid UTF-8 encoding.
-Here’s a list of concepts and resources that will be helpful:
 """
-from typing import List
+Function to validate if a dataset represents a valid UTF-8 encoding
+"""
 
 
-def mask(byte: int) -> tuple | None:
-    """Mask the byte to define if it a ascii, bytes' header or cont. bit"""
-    byte_utf = {
-        0x80: (0x00, 0),
-        0xC0: (0x80, 0),
-        0xE0: (0xC0, 1),
-        0xF0: (0xE0, 2),
-        0xF9: (0xF0, 3),
-    }
+def validUTF8(data):
+    # Number of bytes in the current UTF-8 character
+    num_bytes = 0
 
-    for mask, end in byte_utf.items():
-        if byte & mask == end[0]:
-            return end
-    return None
+    # Masks to check the first few bits of each byte
+    mask1 = 1 << 7  # 10000000 in binary
+    mask2 = 1 << 6  # 01000000 in binary
 
+    for byte in data:
+        # Only need to examine the last 8 bits
+        byte = byte & 0xFF
 
-def validUTF8(data: List[int]) -> bool:
-    """determines if a given data set represents a valid UTF-8 encoding.
+        if num_bytes == 0:
+            # Determine the number of bytes in the UTF-8 character
+            mask = 1 << 7
+            while mask & byte:
+                num_bytes += 1
+                mask >>= 1
 
-    Args:
-        data (list): data to test
-    """
-    ctr = 0
-    for ele in data:
-        end = mask(ele)
+            # 1-byte character
+            if num_bytes == 0:
+                continue
 
-        if end is None:
-            return False
-
-        if ctr and end[1] == 0x80:
-            ctr -= 1
-        elif ctr:
-            return False
+            # UTF-8 can only be 1 to 4 bytes long
+            if num_bytes == 1 or num_bytes > 4:
+                return False
         else:
-            ctr = end[1]
-    return True
+            # Check if the byte starts with 10xxxxxx
+            if not (byte & mask1 and not (byte & mask2)):
+                return False
+
+        # Decrease the byte count for the current character
+        num_bytes -= 1
+
+    return num_bytes == 0
