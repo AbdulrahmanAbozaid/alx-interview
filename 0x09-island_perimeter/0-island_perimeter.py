@@ -22,8 +22,9 @@ def cell_perim(grid, cell: tuple) -> int:
     for side in sides:
         l_side = cell[0]+side[0]
         r_side = cell[1]+side[1]
-        cnt += int(is_inside(l_side, r_side, grid)
-                   and not grid[l_side][r_side])
+        cnt += int(not is_inside(l_side, r_side, grid) or
+                   (is_inside(l_side, r_side, grid)
+                   and not grid[l_side][r_side]))
 
     return cnt
 
