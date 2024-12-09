@@ -4,7 +4,7 @@ Island Perimeter
 """
 
 
-def is_inside(i, j, grid) -> bool:
+def is_inside(i: int, j: int, grid: list) -> bool:
     """check i, j are in the grid"""
     if (i < 0 or j < 0):
         return False
@@ -15,7 +15,7 @@ def is_inside(i, j, grid) -> bool:
     return True
 
 
-def cell_perim(grid, cell: tuple) -> int:
+def cell_perim(grid: list, cell: tuple) -> int:
     """Calc ground cell perimeter"""
     sides = [(-1, 0), (1, 0), (0, 1), (0, -1)]
     cnt = 0
@@ -29,7 +29,7 @@ def cell_perim(grid, cell: tuple) -> int:
     return cnt
 
 
-def island_perimeter(grid):
+def island_perimeter(grid: list) -> int:
     """Give island perimeter
 
     Args:
@@ -40,6 +40,7 @@ def island_perimeter(grid):
     """
     if (len(grid) <= 0):
         return 0
+
     perim = 0
 
     for i in range(len(grid)):
